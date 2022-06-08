@@ -1,0 +1,40 @@
+services:
+  loadbalancer:
+    image: nginx:1.21.6
+    container_name: loadbalancer
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.default:/etc/nginx/conf.d/default.conf
+    networks:
+      - loadnet
+    depends_on:
+      - app1
+      - app2
+      - app3
+  app1:
+    container_name: app1
+    build:
+      dockerfile: Containerfile
+    environment:
+      APP_NAME: app1
+    networks:
+      - loadnet
+  app2:
+    container_name: app2
+    build:
+      dockerfile: Containerfile
+    environment:
+      APP_NAME: app2
+    networks:
+      - loadnet
+  app3:
+    container_name: app3
+    build:
+      dockerfile: Containerfile
+    environment:
+      APP_NAME: app3
+    networks:
+      - loadnet
+networks:
+  loadnet:
